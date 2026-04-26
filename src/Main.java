@@ -1,13 +1,25 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-void main() {
-    //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-    // to see how IntelliJ IDEA suggests fixing it.
-    IO.println(String.format("Hello and welcome!"));
+import java.util.Random;
 
-    for (int i = 1; i <= 5; i++) {
-        //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-        // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-        IO.println("i = " + i);
+void main() {
+    MyHashTable<MyTestingClass, String> hashTable = new MyHashTable<>();
+    Random random = new Random();
+
+    for (int i = 0; i < 10000; i++) {
+        String randomName = "Student" + i;
+
+        MyTestingClass student = new MyTestingClass(i, randomName);
+
+        hashTable.put(student, "Data For student " + i);
     }
-}
+
+    int M = hashTable.getM();
+    int[] counts = new int[M];
+
+    for (int i = 0; i < M; i++) {
+        counts[i] = hashTable.getBucketSize(i);
+    }
+
+    System.out.println("Распределение элементов по бакетам:");
+    for (int i = 0; i < counts.length; i++) {
+        System.out.println("Бакет " + i + ": " + counts[i] + " элементов");
+    }}
