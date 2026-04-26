@@ -65,6 +65,54 @@ public class MyBST<K extends Comparable<K>,V> implements Iterable<MyBST.Node<K,V
         return null;
     }
 
+    public void delete(K key) {
+        Node<K, V> current = root;
+        Node<K, V> parent = null;
+
+        // 1. Поиск узла и его родителя
+        while (current != null && !current.key.equals(key)) {
+            parent = current;
+            int cmp = key.compareTo(current.key);
+            if (cmp < 0) current = current.left;
+            else current = current.right;
+        }
+
+        if (current == null) return; // Узел не найден
+
+        // 2. Случай: у узла два ребенка
+        if (current.left != null && current.right != null) {
+            // Ищем преемника (минимальный в правом поддереве)
+            Node<K, V> successor = current.right;
+            Node<K, V> successorParent = current;
+
+            while (successor.left != null) {
+                successorParent = successor;
+                successor = successor.left;
+            }
+
+            // Копируем данные преемника в текущий узел
+            current.key = successor.key;
+            current.value = successor.value;
+
+            // Теперь нам нужно удалить successor (у него максимум 1 правый ребенок)
+            current = successor;
+            parent = successorParent;
+        }
+
+        // 3. Случай: у узла 0 или 1 ребенок
+        Node<K, V> child = (current.left != null) ? current.left : current.right;
+
+        if (parent == null) {
+            root = child; // Удаляем корень
+        } else if (parent.left == current) {
+            parent.left = child;
+        } else {
+            parent.right = child;
+        }
+
+        size--;
+    }
+
     @Override
     public Iterator<Node<K, V>> iterator() {
         return new Iterator<Node<K, V>>() {
